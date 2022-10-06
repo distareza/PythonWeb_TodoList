@@ -10,3 +10,12 @@ https://flask.io/new
 
 Top Secret: Most developer jobs will be interviewed by someone who is a manager. The top piece of technology a manager uses is a task-manager like Trello or Jira. If you can build a good task-manager, you will definitely impress your future interviewer!
 
+![alt text](https://github.com/distareza/PythonWeb_TodoList/blob/master/Screenshot20221006194345.png?raw=true)
+
+![alt text](https://github.com/distareza/PythonWeb_TodoList/blob/master/Screenshot20221006194436.png?raw=true)
+
+![alt text](https://github.com/distareza/PythonWeb_TodoList/blob/master/Screenshot20221006194502.png?raw=true)
+
+![alt text](https://github.com/distareza/PythonWeb_TodoList/blob/master/Screenshot20221006194531.png?raw=true)
+
+![alt text](https://github.com/distareza/PythonWeb_TodoList/blob/master/Screenshot20221006194550.png?raw=true)
