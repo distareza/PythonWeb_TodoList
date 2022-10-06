@@ -1,0 +1,57 @@
+    <div id="divDialog" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false"  tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">New Todo List</h5>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="add-todo-list-form">
+                <div class="mb-3">
+                    <label for="todo-name" class="col-form-label">To Do List Name:</label>
+                    <input type="text" class="form-control" id="todo-name" name="todo-name" required>
+                    <div class="invalid-feedback">Please enter value</div>
+                </div>
+                <div class="mb-3">
+                    <label for="message-text" class="col-form-label">Message:</label>
+                    <textarea class="form-control" id="message-text" name="message-text" required></textarea>
+                    <div class="invalid-feedback">Please enter value</div>
+                </div>
+                <div class="mb-3">
+                    <label>Task List</label>
+                    <ul id="taskList"></ul>
+                    <button class="btn btn-primary" type="button" id="btnAddTask"><i class="fa-solid fa-plus"></i> Add Task</button>
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="btnClose" class="btn btn-secondary">Cancel</button>
+            <button type="button" id="btnSave" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="divDialog2" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">New Task</h5>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="add-task-form">
+                <div class="mb-3">
+                    <label for="task-name" class="col-form-label">Task Name:</label>
+                    <input type="text" class="form-control" id="task-name" required>
+                    <div class="invalid-feedback">Please enter value</div>
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="btnCloseTask" class="btn btn-secondary">Cancel</button>
+            <button type="button" id="btnSaveTask" class="btn btn-primary">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>

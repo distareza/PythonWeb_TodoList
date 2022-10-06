@@ -1,0 +1,189 @@
+{% extends 'base.html'  %}
+{% block header %}
+<script>
+
+  $(document).ready(function(){
+    $("#btnClose").click(function(){
+      $("#divDialog").modal("hide");
+    });
+    $("#btnCloseTask").click(function(){
+      $("#divDialog2").modal("hide");
+    });
+    $("#btnSave").click(function(){
+        var forms = $("#add-todo-list-form");
+
+        $("#add-todo-list-form input,textarea").each(function() {
+            $(this).removeClass("is-valid is-invalid");
+        });
+
+        if (forms[0].checkValidity() === false){
+            $("#add-todo-list-form input,textarea").each(function() {
+                if ($(this)[0].checkValidity() === false) $(this).addClass("is-invalid");
+            });
+
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+
+        todo_name = $("#todo-name").val();
+        message_text = $("#message-text").val();
+
+        $.ajax({
+            url : '{{url_for("adddata")}}',
+            type : 'POST',
+            data : $(forms).serialize(),
+            success : function (data) {
+                getTodoList();
+                $("#divDialog").modal("hide");
+            },
+            error : function (data) {
+                alert(data);
+            }
+        });
+
+
+    });
+    $("#btnAddTask").click(function(){
+        $("#task-name").val("");
+        $("#divDialog2").modal("show");
+        $("#task-name").focus();
+    });
+
+    $("#btnSaveTask").click(function(){
+        var forms = $("#add-task-form");
+
+        $("#add-task-form input").each(function() {
+            $(this).removeClass("is-valid is-invalid");
+        });
+
+        if (forms[0].checkValidity() === false){
+            $("#add-task-form input").each(function() {
+                if ($(this)[0].checkValidity() === false) $(this).addClass("is-invalid");
+            });
+                        
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+
+        task_name = $("#task-name").val();
+        $("#divDialog2").modal("hide");
+
+        listTask = $("#taskList");
+
+        item_task = $("<LI>").text(task_name);
+        item_input = $("<INPUT type='hidden' name='task'>").val(task_name);
+        icon_remove_task = $("<i class='fa-regular fa-trash-can'>").click(function() {
+            $(this).parent("li").remove();
+        });
+        $(item_task).append(icon_remove_task).append(item_input);
+        $(listTask).append(item_task);
+    });
+
+    $("#addNewTodoList").click(function() {
+        $("#divDialog").modal("show");
+        $("#todo-name").focus();
+
+        $("#taskList").empty();
+        $(".modal-dialog input,textarea").each(function() {
+            $(this).val("");
+            $(this).removeClass("is-valid is-invalid");
+        });
+
+    });
+
+    getTodoList();
+  });
+
+  function getTodoList() {
+    $.get('{{url_for("masterdata")}}',function(data, status) {
+        $("#content").empty();
+        console.log(data);
+        if (!data) return;
+        $(data).each(function (idx, item) {
+          item_id = item.id;
+
+          div_item = $('<div class="card" style="width: 100%;">');
+          remove_todo = $("<button type='button' class='btn btn-secondary'>")
+            .append( $("<i class='fa-regular fa-trash-can'>") )
+            .append( $("<span>").text("remove") )
+            .click(function() {
+                $.ajax({
+                    url: '{{url_for("removedata")}}',
+                    type: 'POST',
+                    data: { "todo-name": item.List },
+                    success : function(data){
+                        getTodoList();
+                    },
+                    error : function (data) {
+                        alert(data.responseText);
+                    }
+                });
+            });
+
+          $(div_item).append(
+            $("<div class='card-body'>")
+              .append($("<h5 class='card-title'>").text(item.List))
+              .append($("<p class='card-text'>").text(item.Description))
+              .append(remove_todo)
+          );
+          $("#content").append($("<div class='col'>").append(div_item));
+
+          getListTodoList(item_id, $(div_item));
+        });
+    });
+  }
+
+  function doCheck(obj) {
+    $.ajax({
+        url : "{{url_for('updatedata')}}",
+        data: {
+                "id": $(obj).data("item_id"),
+                "complete": $(obj).is(":checked")
+               },
+        type: "POST",
+        success: function(response) {
+            console.log(response);
+        }
+    });
+  }
+
+  function getListTodoList(parentId, cardObj) {
+    $.get("detail-data/" + parentId, function(data, status){
+      console.log(data);
+      list = $("<UL>");
+       $(data).each(function (idx, item) {
+          item_id = item.id;
+          item_name = item.name;
+          item_complete = item.complete;
+          item_checkbox_id = "checkbox_" + item_id;
+
+          item_checkbox = $("<input class='form-check-input' type='checkbox' id='" + item_checkbox_id + "'>");
+          item_checkbox.prop("checked", item_complete);
+          item_checkbox.data("item_id", item_id);
+          $(item_checkbox).change(function() { doCheck(this); });
+          item_checkbox_lbl = $("<label class='form-check-label' for='" + item_checkbox_id + "'>").text(item_name);
+
+          $(list).append( $("<LI>")
+            .append(item_checkbox)
+            .append(item_checkbox_lbl)
+          );
+
+       });
+       $(cardObj).append(list);
+    });
+  }
+</script>
+{% endblock %}
+{% block content %}
+
+    {% include 'modal_dialog.html' %}
+
+    <button type="button" class="btn btn-primary" id="addNewTodoList"><i class="fa-solid fa-plus"></i> New To Do List</button>
+    <div  class="container px-3">
+        <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3" id="content">
+        </div>
+    </div>
+
+{% endblock %}
